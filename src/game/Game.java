@@ -55,29 +55,30 @@ public class Game {
     }
 
     private void updatePositions() {
-        for(int i = 0; i < enemyProjectiles.size(); i++) {
-            Projectile p = enemyProjectiles.get(i);
+        for(Projectile p: enemyProjectiles) {
             p.moveDown();
-            if(p.isOutOfBounds() == true) {
-                enemyProjectiles.remove(p);
-            }
+            OutOfBounds(p, enemyProjectiles, "e");
         }
-
-        for(int i = 0; i < playerProjectiles.size(); i++) {
-            Projectile p = playerProjectiles.get(i);
+        for(Projectile p: playerProjectiles) {
             p.moveUp();
-            if(p.isOutOfBounds() == true) {
+            OutOfBounds(p, playerProjectiles, "p");
+        }
+        for(Enemy e : enemies) {
+            e.move();
+         } player.move();
+    }
+    private void OutOfBounds(Projectile p, List<Projectile> projectiles, String projectileType) {
+        if(p.isOutOfBounds() == true && projectileType.equals("e")) {
+                enemyProjectiles.remove(p);
+
+        }
+        if(p.isOutOfBounds() == true && projectileType.equals("p")) {
                 playerProjectiles.remove(p);
             }
-        }
+        
 
-        for(int i = 0; i < enemies.size(); i++) {
-            Enemy e = enemies.get(i);
-            e.move();
-        }
-
-        player.move();
     }
+
 
     private void fireProjectiles() {
         for(int i = 0; i < enemies.size(); i++) {
@@ -106,7 +107,6 @@ public class Game {
                 }
             }
         }
-
         for(int i = 0; i < enemyProjectiles.size(); i++) {
             Projectile p = enemyProjectiles.get(i);
             if(p.collidesWith(player)) {
